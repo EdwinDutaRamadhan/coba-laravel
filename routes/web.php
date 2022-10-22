@@ -3,6 +3,7 @@
 use App\Models\Post;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PostController;
+use App\Models\Category;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -19,9 +20,6 @@ Route::get('/', function () {
         "title" => "Home"
     ]);
 });
-Route::get('/blog',[PostController::class, 'index'] );
-Route::get('/posts/{post:slug}', [PostController::class, 'show'] );
-
 Route::get('/about', function () {
     return view('about', [
         "title" => "About",
@@ -29,4 +27,19 @@ Route::get('/about', function () {
         "email" => "edwinduta@gmail.com"
     ]);
 });
+Route::get('/blog',[PostController::class, 'index'] );
+Route::get('/posts/{post:slug}', [PostController::class, 'show'] );
 
+Route::get('/category/{category:slug}', function(Category $category){
+    return view('category', [
+        'title' => $category->name,
+        'posts' => $category->posts,
+        'category' => $category->name
+    ]);
+});
+Route::get('/categories', function(){
+    return view('categories', [
+        'title' => 'Post Categories',
+        'categories' => Category::all()
+    ]);
+});
